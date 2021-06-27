@@ -14,7 +14,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import axios from 'axios'
 import MaterialDatatable from "material-datatable";
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
+
+
+
+
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -37,13 +41,28 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Persona() {
-    const [nombre, setNombre] = useState("");
-    const [apellido, setApellido] = useState("");
-    const [rut, setRut] = useState("");
+
     
+    //const [nombre, setNombre] = useState("");
+    //const [apellido, setApellido] = useState("");
+    //const [rut, setRut] = useState("");
+    
+
+
+
+
     const [data, setData] = useState([]);
     const [accion,setAccion] = useState("Guardar")
     const [id,setId] = useState(null)
+
+    const [usuario, setUsuario] = useState("");
+    const [password, setPassword] = useState("");
+   
+    const [value, setValue] = React.useState(2);
+
+    const handleChange = (event, newValue) => {
+    setValue(newValue);
+    };
 
     useEffect(() => {
 
@@ -58,7 +77,7 @@ export default function Persona() {
     const columns = [
 
         {
-            name: "Sel",
+            name: "Seleccionar Usuario",
             options: {
               headerNoWrap: true,
               customBodyRender: (item) => {
@@ -67,9 +86,11 @@ export default function Persona() {
                     variant="contained"
                     className="btn-block"
                     onClick={() =>{
-                        setNombre(item.nombre)
-                        setApellido(item.apellido)
-                        setRut(item.rut)
+                        //setNombre(item.nombre)
+                        //setApellido(item.apellido)
+                        //setRut(item.rut)
+                        setUsuario(item.usuario)
+                        setPassword(item.password)
                         setId(item.id)
                         setAccion("Modificar")
 
@@ -82,18 +103,13 @@ export default function Persona() {
             },
           },
         {
-            name: 'Nombre',
-            field: 'nombre',
+            name: 'Usuario',
+            field: 'usuario',
         },
         {
-            name: 'Apellido',
-            field: 'apellido',
+            name: 'Contraseña',
+            field: 'password',
         },
-        {
-            name: 'Rut',
-            field: 'rut',
-        },
-
     ];
 
     const options = {
@@ -106,7 +122,7 @@ export default function Persona() {
 
         axios
             .get(
-                `http://192.99.144.232:8080/api/persona`
+                `http://192.99.144.232:8080/api/usuario`
             )
             .then(
                 (response) => {
@@ -132,10 +148,9 @@ export default function Persona() {
       if(accion=="Guardar"){
         axios
         .post(
-            `http://192.99.144.232:8080/api/persona`, {
-            nombre: nombre,
-            apellido: apellido,
-            rut: rut
+            `http://192.99.144.232:8080/api/usuario`, {
+            usuario: usuario,
+            contraseña: password,
         }
         )
         .then(
@@ -167,10 +182,9 @@ export default function Persona() {
       if(accion=="Modificar"){
         axios
         .put(
-            `http://192.99.144.232:8080/api/persona/${id}`, {
-            nombre: nombre,
-            apellido: apellido,
-            rut: rut
+            `http://192.99.144.232:8080/api/usuario/${id}`,{
+            usuario: usuario,
+            contraseña: password,
         }
         )
         .then(
@@ -197,7 +211,7 @@ export default function Persona() {
     const Eliminar = () =>{
         axios
         .delete(
-            `http://192.99.144.232:8080/api/persona/${id}`
+            `http://192.99.144.232:8080/api/usuario/${id}`
         )
         .then(
             (response) => {
@@ -220,10 +234,8 @@ export default function Persona() {
     }
 
     const Limpiar = () =>{
-        setNombre("");
-        setApellido("");
-        setRut("");
-        setAccion("Guardar");
+        setUsuario("");
+        setPassword("");
     }
 
     return (
@@ -234,57 +246,41 @@ export default function Persona() {
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Registro Persona
+                    Login Usuario
                 </Typography>
                 <form className={classes.form} noValidate>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                value={nombre}
+                                value={usuario}
                                 onChange={(evt) => {
                                     console.log(evt)
-                                    setNombre(evt.target.value)
+                                    setUsuario(evt.target.value)
                                 }}
                                 autoComplete="fname"
                                 name="firstName"
                                 variant="outlined"
                                 required
                                 fullWidth
-                                id="firstName"
-                                label="Nombre"
+                                id="name"
+                                label="Usuario"
                                 autoFocus
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                value={apellido}
+                                value={password}
                                 onChange={(evt) => {
 
-                                    setApellido(evt.target.value)
+                                    setPassword(evt.target.value)
                                 }}
                                 variant="outlined"
                                 required
                                 fullWidth
                                 id="lastName"
-                                label="Apellido"
+                                label="Contraseña"
                                 name="lastName"
                                 autoComplete="lname"
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                value={rut}
-                                onChange={(evt) => {
-
-                                    setRut(evt.target.value)
-                                }}
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="email"
-                                label="Rut"
-                                name="email"
-                                autoComplete="email"
                             />
                         </Grid>
 
@@ -309,17 +305,20 @@ export default function Persona() {
                     </Button>
                     <Grid container justify="flex-end">
                         <MaterialDatatable
-                            title={"Employee List"}
+                            title={"User List"}
                             data={data}
                             columns={columns}
                             options={options}
                         />
-
+                    
 
                     </Grid>
                 </form>
             </div>
 
-        </Container>
+     
+                                
+            </Container>
+       
     );
 }

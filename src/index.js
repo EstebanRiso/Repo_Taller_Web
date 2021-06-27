@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import Persona from './vistas/Persona';
+import Tablita from './vistas/tablita';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Persona />
+    <Tablita />
   </React.StrictMode>,
   document.getElementById('root')
 );
