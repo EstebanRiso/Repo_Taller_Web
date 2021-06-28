@@ -224,7 +224,7 @@ export default function Persona() {
         .post(
             `http://192.99.144.232:8080/api/usuario`, {
             usuario: usuario,
-            contraseña: password,
+            password: password,
         }
         )
         .then(
@@ -258,7 +258,7 @@ export default function Persona() {
         .put(
             `http://192.99.144.232:8080/api/usuario/${id}`,{
             usuario: usuario,
-            contraseña: password,
+            password: password,
         }
         )
         .then(
