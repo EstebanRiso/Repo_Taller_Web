@@ -17,6 +17,45 @@ import MaterialDatatable from "material-datatable";
 import Swal from 'sweetalert2';
 
 
+import PropTypes from 'prop-types';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+  
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && (
+          <Box p={3}>
+            <Typography>{children}</Typography>
+          </Box>
+        )}
+      </div>
+    );
+  }
+
+
+  TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.any.isRequired,
+    value: PropTypes.any.isRequired,
+  };
+
+  function a11yProps(index) {
+    return {
+      id: `simple-tab-${index}`,
+      'aria-controls': `simple-tabpanel-${index}`,
+    };
+  }
+  
 
 
 
@@ -76,6 +115,41 @@ export default function Persona() {
 
     const columns = [
 
+       /* {
+            name: "Seleccionar Usuario",
+            options: {
+              headerNoWrap: true,
+              customBodyRender: (item) => {
+                return (
+                  <Button
+                    variant="contained"
+                    className="btn-block"
+                    onClick={() =>{
+                        setUsuario(item.usuario)
+                        setPassword(item.password)
+                        setId(item.id)
+                        setAccion("Modificar")
+                    }}
+                  >
+                    Seleccionar
+                  </Button>
+                );
+              },
+            },
+          }, */
+        {
+            name: 'Usuario',
+            field: 'usuario',
+        },
+        {
+            name: 'Contraseña',
+            field: 'password',
+        },
+    ];
+
+    
+    const columns2 = [
+
         {
             name: "Seleccionar Usuario",
             options: {
@@ -86,14 +160,10 @@ export default function Persona() {
                     variant="contained"
                     className="btn-block"
                     onClick={() =>{
-                        //setNombre(item.nombre)
-                        //setApellido(item.apellido)
-                        //setRut(item.rut)
                         setUsuario(item.usuario)
                         setPassword(item.password)
                         setId(item.id)
                         setAccion("Modificar")
-
                     }}
                   >
                     Seleccionar
@@ -111,6 +181,10 @@ export default function Persona() {
             field: 'password',
         },
     ];
+
+
+
+
 
     const options = {
         selectableRows:false
@@ -239,16 +313,31 @@ export default function Persona() {
     }
 
     return (
-        <Container component="main" maxWidth="xs">
+
+        <Container component="main" maxWidth="lg">
             <CssBaseline />
             <div className={classes.paper}>
+     
+
+        <AppBar position="static">
+          <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
+            <Tab label="Guardar" {...a11yProps(0)} />
+            <Tab label="Eliminar" {...a11yProps(1)} />
+            <Tab label="Listar" {...a11yProps(2)} />
+            <Tab label="Modificar" {...a11yProps(3)} />
+          </Tabs>
+        </AppBar>
+        <TabPanel value={value} index={0}>
+
+        
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Login Usuario
                 </Typography>
-                <form className={classes.form} noValidate>
+          <form className={classes.form} noValidate>
+           
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField
@@ -294,6 +383,56 @@ export default function Persona() {
                     >
                         {accion}
                     </Button>
+
+          
+          </form>
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+             <Avatar className={classes.avatar}>
+                    <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    Eliminar Usuario
+                </Typography>
+           <form className={classes.form} noValidate>
+
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                value={usuario}
+                                onChange={(evt) => {
+                                    console.log(evt)
+                                    setUsuario(evt.target.value)
+                                }}
+                                autoComplete="fname"
+                                name="firstName"
+                                variant="outlined"
+                                required
+                                fullWidth
+                                id="name"
+                                label="Usuario"
+                                autoFocus
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                value={password}
+                                onChange={(evt) => {
+
+                                    setPassword(evt.target.value)
+                                }}
+                                variant="outlined"
+                                required
+                                fullWidth
+                                id="lastName"
+                                label="Contraseña"
+                                name="lastName"
+                                autoComplete="lname"
+                            />
+                        </Grid>
+
+                    </Grid>
+                     
                     <Button
                         fullWidth
                         variant="contained"
@@ -303,21 +442,96 @@ export default function Persona() {
                     >
                         Eliminar
                     </Button>
-                    <Grid container justify="flex-end">
+        
+          </form>
+        </TabPanel>
+        <TabPanel value={value} index={2}>
+          <form className={classes.form} noValidate>
+                  <Grid container justify="flex-end">
                         <MaterialDatatable
-                            title={"User List"}
+                            title={"Lista de Usuarios"}
                             data={data}
                             columns={columns}
                             options={options}
                         />
                     
-
                     </Grid>
-                </form>
-            </div>
+        
+          </form>
+        </TabPanel>
+        <TabPanel value={value} index={3}>
+          <form className={classes.form} noValidate>
+                  
+                <Avatar className={classes.avatar}>
+                    <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    Modificar Usuario
+                </Typography>
 
-     
-                                
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                value={usuario}
+                                onChange={(evt) => {
+                                    console.log(evt)
+                                    setUsuario(evt.target.value)
+                                }}
+                                autoComplete="fname"
+                                name="firstName"
+                                variant="outlined"
+                                required
+                                fullWidth
+                                id="name"
+                                label="Usuario"
+                                autoFocus
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                value={password}
+                                onChange={(evt) => {
+
+                                    setPassword(evt.target.value)
+                                }}
+                                variant="outlined"
+                                required
+                                fullWidth
+                                id="lastName"
+                                label="Contraseña"
+                                name="lastName"
+                                autoComplete="lname"
+                            />
+                        </Grid>
+                    <Button
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                        onClick={() => Guardar()}
+                    >
+                        {accion}
+                    </Button>
+                    </Grid>
+                 
+                  <Grid container justify="flex-end">
+                        <MaterialDatatable
+                            title={"Modificar Lista de Usuarios"}
+                            data={data}
+                            columns={columns2}
+                            options={options}
+                        />
+                    
+                    </Grid>
+        
+          </form>
+        </TabPanel>
+
+
+
+
+      </div>
+                                  
             </Container>
        
     );
