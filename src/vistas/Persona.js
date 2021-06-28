@@ -397,7 +397,7 @@ export default function Persona() {
            <form className={classes.form} noValidate>
 
                     <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={12}>
                             <TextField
                                 value={usuario}
                                 onChange={(evt) => {
@@ -412,22 +412,6 @@ export default function Persona() {
                                 id="name"
                                 label="Usuario"
                                 autoFocus
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                value={password}
-                                onChange={(evt) => {
-
-                                    setPassword(evt.target.value)
-                                }}
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="lastName"
-                                label="Contraseña"
-                                name="lastName"
-                                autoComplete="lname"
                             />
                         </Grid>
 
